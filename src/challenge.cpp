@@ -46,7 +46,7 @@ Challenge::Challenge(ChallengeData* _challenge_data, GUIMain * _gui_main) :
         }
 
         //create a new GameEngine instance for the python api, we need to review if this is the best place to create it
-        game_engine = new GameEngine(_gui_main, this);
+        game_engine = new GameEngine(_gui_main, challenge_data, this);
 
         //The intepreter creates a new python thread which is the main thread for the running level, the list of all objects in the level are passed to it which are then exposed to the python code
         daemon = std::make_unique<LockableEntityThread>(challenge_data->interpreter->register_entities(entity_list, *game_engine));
@@ -68,6 +68,8 @@ Challenge::~Challenge() {
     delete game_engine;
     //All threads created for the challenge should have terminated now
     LOG(INFO) << " CHALLENGE DESTROYED ";
+    std::cout << "Returning from challenge destructor" << std::endl;
+    return;
 }
 
 int Challenge::make_object(glm::vec2 position,

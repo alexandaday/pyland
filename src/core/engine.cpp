@@ -184,6 +184,10 @@ bool Engine::walkable(glm::ivec2 location) {
     return true;
 }
 
+void Engine::change_map(std::string map_location){
+    game_main->change_challenge(map_location);
+}
+
 void Engine::change_tile(glm::ivec2 tile, std::string layer_name, std::string tile_name) {
     map_viewer->get_map()->update_tile(tile.x, tile.y, layer_name, tile_name);
 }

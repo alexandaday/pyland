@@ -82,6 +82,7 @@ private:
     Challenge* challenge;
     std::chrono::time_point<std::chrono::steady_clock> last_clock;
 
+    bool changing_challenge;
 
 public:
     GameMain(int &argc, char **argv);
@@ -89,6 +90,7 @@ public:
 
     void game_loop(bool showMouse);
     Challenge* pick_challenge(ChallengeData* challenge_data);
+    void change_challenge(std::string map_location);
 
     GameWindow* getGameWindow();
     CallbackState getCallbackState();

@@ -300,6 +300,8 @@ GameMain::GameMain(int &argc, char **argv):
 
     Engine::set_game_main(this);
 
+    changing_challenge = false;
+
     //Setup challenge
     challenge_data = (new ChallengeData(
                           "",
@@ -339,7 +341,10 @@ GameMain::~GameMain()
 void GameMain::game_loop(bool showMouse)
 {
     if (!challenge_data->game_window->check_close() && challenge_data->run_challenge)
+    //if (!changing_challenge)
     {
+        //std::cout << "Doing game loop" << std::endl;
+
         //callbackstate.man_move(glm::ivec2( 0, 1));
         last_clock = std::chrono::steady_clock::now();
 
@@ -390,14 +395,14 @@ void GameMain::game_loop(bool showMouse)
     }
     else
     {
-        em->flush_and_disable(interpreter.interpreter_context);
-        delete challenge;
-        em->reenable();
-
-        challenge_data->run_challenge = true;
-        challenge = pick_challenge(challenge_data);
-        Engine::set_challenge(challenge);
-        callbackstate.stop();
+//        em->flush_and_disable(interpreter.interpreter_context);
+//        delete challenge;
+//        em->reenable();
+//
+//        challenge_data->run_challenge = true;
+//        challenge = pick_challenge(challenge_data);
+//        Engine::set_challenge(challenge);
+//        callbackstate.stop();
         //Update tool bar here
         //embedWindow.get_cur_game_init()->getMainWin()->updateToolBar();
     }
@@ -411,9 +416,57 @@ Challenge* GameMain::pick_challenge(ChallengeData* challenge_data) {
     Config::json j = Config::get_instance();
     std::string map_name = j["files"]["full_level_location"];
     challenge_data->map_name = map_name + "/layout.tmx";
+    std::cout << "Creating first challenge" << std::endl;
+    LOG(INFO) << "Creating first challenge";
     challenge = new Challenge(challenge_data, &gui);
 
     return challenge;
+}
+
+void GameMain::change_challenge(std::string map_location) {
+
+    std::cout << "Got 0" << std::endl;
+
+    changing_challenge = true;
+
+    //challenge->event_finish.trigger(0);
+
+    std::cout << "Got 0.1" << std::endl;
+
+    challenge_data->run_challenge = false;
+
+    std::cout << "Got 0.2" << std::endl;
+
+    //em->flush_and_disable(interpreter.interpreter_context);
+
+    std::cout << "Got 0.3" << std::endl;
+
+    delete challenge;
+
+    std::cout << "Got 0.4" << std::endl;
+
+    //em->reenable();
+
+    std::cout << "Got 1" << std::endl;
+
+    challenge_data->run_challenge = true;
+
+    std::cout << "Got 2" << std::endl;
+
+    Challenge *challenge(nullptr);
+    Config::json j = Config::get_instance();
+    std::string world_name = j["files"]["full_world_location"];
+    challenge_data->map_name = world_name + map_location + "/layout.tmx";
+    challenge = new Challenge(challenge_data, &gui);
+
+    std::cout << "Got 3" << std::endl;
+
+    Engine::set_challenge(challenge);
+    callbackstate.stop();
+
+    std::cout << "Got 4" << std::endl;
+
+    changing_challenge = false;
 }
 
 GameWindow* GameMain::getGameWindow()

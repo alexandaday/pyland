@@ -8,6 +8,7 @@
 #include "input_handler.hpp"
 
 class Challenge;
+class ChallengeData;
 class GUIMain;
 ///
 /// This class is used as the python interface for general game-engine functionality.
@@ -41,7 +42,7 @@ class GameEngine {
 
         static int THE_AWNSER_TO_LIFE_THE_UNIVERSE_AND_EVERYTHING() { return 42; }
 
-        GameEngine(GUIMain *_gui_main, Challenge *_challenge);
+        GameEngine(GUIMain *_gui_main, ChallengeData *challenge_data, Challenge *_challenge);
         ///
         /// Add an object to the game map at the given position.
         /// The name is used to give the object a name and the class_location string is
@@ -61,7 +62,7 @@ class GameEngine {
         /// loads in the new level and objects.
         ///
         ///
-        void change_level(std::string level_location);
+        void change_map(std::string map_location);
 
         int get_tile_type(int x, int y);
 

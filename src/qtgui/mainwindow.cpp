@@ -279,9 +279,9 @@ MainWindow::MainWindow(GameMain *exGame):
     SDL_GL_LoadLibrary(NULL);
     glContext = SDL_GL_CreateContext(embedWindow);
 
-    connect(buttonRun,SIGNAL(released()),this,SLOT (clickRun()));
-    connect(buttonSpeed,SIGNAL(released()),this,SLOT (clickSpeed()));
-    connect(buttonClear,SIGNAL(released()),this,SLOT (clearTerminal()));
+    //connect(buttonRun,SIGNAL(released()),this,SLOT (clickRun()));
+    //connect(buttonSpeed,SIGNAL(released()),this,SLOT (clickSpeed()));
+    //connect(buttonClear,SIGNAL(released()),this,SLOT (clearTerminal()));
 
     this->showMaximized();
 
@@ -619,8 +619,6 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 {
     QKeyEvent *keyEvent = NULL;
     QMouseEvent *mouseEvent = NULL;
-    //QFocusEvent *focusEvent = NULL;
-    //QResizeEvent *resizeEvent = NULL;
     //Check if QT event is a keyboard or mouse event, and push it to SDL
     if (event->type() == 6)//QEvent::KeyPress)
     {
@@ -738,8 +736,6 @@ void MainWindow::runCode(int script)
         setRunning(false);
         updateSpeed();
         InputHandler::get_instance()->run_list(InputHandler::INPUT_HALT);
-        //game->getCallbackState().stop();
-        //TODO, create hooks into script-runner to stop the correct script.
     }
     else
     {
@@ -938,13 +934,14 @@ void MainWindow::setAnyOutput(bool option)
 
 void MainWindow::setColourScheme(int r1, int g1, int b1, int r2, int g2, int b2)
 {
-
+    //Q_ASSERT(textInfoWidget->thread() == QThread::currentThread());
     textInfoWidget->setStyleSheet(("background-color: rgb("+std::to_string(r2)+","+std::to_string(g2)+","+std::to_string(b2)+");"+
                                    "border: 5px rgb("+std::to_string(r2)+","+std::to_string(g2)+","+std::to_string(b2)+");"+
                                    "font: 17pt;").c_str());
-
+    //Q_ASSERT(colourPalette->thread() == QThread::currentThread());
     colourPalette.setColor(QPalette::Background,QColor(r1,g1,b1));
     colourPalette.setColor(QPalette::Button,QColor(r2,g2,b2));
+    //Q_ASSERT(mainWidget->thread() == QThread::currentThread());
     mainWidget->setPalette(colourPalette);
 }
 

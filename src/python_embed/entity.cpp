@@ -196,7 +196,7 @@ int Entity::get_number_of_animation_frames() {
 
     std::string config_location = j["files"]["object_location"];
     std::string full_file_location = config_location + "/" + file_location + "/sprites/" + this->sprite_location;
-    std::cout << full_file_location << std::endl;
+    //std::cout << full_file_location << std::endl;
 
     int num_frames = (int) std::count_if(boost::filesystem::directory_iterator(full_file_location),
                                          boost::filesystem::directory_iterator(),

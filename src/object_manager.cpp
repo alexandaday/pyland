@@ -55,7 +55,7 @@ void ObjectManager::remove_object(int object_id) {
         objects.erase(object_id);
         LOG(INFO) << "Object " << object_id << " removed";
     } else {
-        LOG(ERROR) << "trying to remove object that either doesn't exist or there are multiple";
+        LOG(ERROR) << "trying to remove object that either doesn't exist or there are multiple of ID " << object_id ;
     }
 }
 

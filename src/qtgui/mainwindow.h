@@ -43,8 +43,6 @@ class QSlider;
 class QPalette;
 class GameMain;
 
-
-
 class MainWindow : public QMainWindow
 {
     Q_OBJECT

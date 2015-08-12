@@ -383,8 +383,6 @@ void MainWindow::initWorkspace(QsciScintilla* ws) {
 
   ws->addScrollBarWidget(zoomWidget,Qt::AlignLeft);
 
-
-
   //Connect buttons to functions
   connect(buttonIn,SIGNAL(released()),this,SLOT (zoomFontIn()));
   connect(buttonOut,SIGNAL(released()),this,SLOT (zoomFontOut()));
@@ -440,9 +438,6 @@ void MainWindow::createActions()
 {
   connect(buttonRun,SIGNAL(released()),this,SLOT (runCode()));
   connect(buttonSpeed,SIGNAL(pressed()),this,SLOT (setGameFocus()));
-  //connect(terminalDisplay,SIGNAL(clicked()),this,SLOT (setGameFocus()));
-  //connect(splitter,SIGNAL(splitterMoved()),this,SLOT (setGameFocus()));
-  //connect(textInfo,SIGNAL(selectionChanged()),this,SLOT (setGameFocus()));
 }
 
 void MainWindow::setGameFocus()

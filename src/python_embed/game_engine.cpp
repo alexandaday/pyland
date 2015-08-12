@@ -3,6 +3,7 @@
 #include "audio_engine.hpp"
 #include "button.hpp"
 #include "challenge.hpp"
+#include "challenge_data.hpp"
 #include "config.hpp"
 #include "engine.hpp"
 #include "event_manager.hpp"
@@ -13,15 +14,17 @@
 #include "text_font.hpp"
 
 
-GameEngine::GameEngine(GUIMain *_gui_main, Challenge *_challenge){
+GameEngine::GameEngine(GUIMain *_gui_main, ChallengeData *challenge_data, Challenge *_challenge){
     gui_main = _gui_main;
     challenge = _challenge;
     button_id = 0;
 }
 
-void GameEngine::change_level(std::string level_location) {
+void GameEngine::change_map(std::string map_location) {
     //TODO: run the finish.py script of a level.
-    LOG(INFO) << "Changing level to " << level_location;
+    //challenge
+    Engine::change_map(map_location);
+    LOG(INFO) << "Changing level to " << map_location;
     return;
 }
 

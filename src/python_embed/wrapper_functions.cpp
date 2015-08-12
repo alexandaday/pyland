@@ -58,7 +58,7 @@ BOOST_PYTHON_MODULE(wrapper_functions) {
         .def("get_config",        &GameEngine::get_config)
         .def("add_text",          &GameEngine::add_text)
         .def("open_dialogue_box", &GameEngine::open_dialogue_box)
-        .def("change_level",      &GameEngine::change_level)
+        .def("change_map",        &GameEngine::change_map)
         .def("get_tile_type",     &GameEngine::get_tile_type)
         .def("play_music",        &GameEngine::play_music)
         .def("register_input_callback",   &GameEngine::register_input_callback)
@@ -70,7 +70,7 @@ BOOST_PYTHON_MODULE(wrapper_functions) {
         .def("trigger_run",       &GameEngine::trigger_run)
         .def("get_run_script",    &GameEngine::get_run_script)
         .def("is_solid"      ,    &GameEngine::is_solid)
-        .add_static_property("INPUT_UP",  &GameEngine::INPUT_UP) //Add constants for different inputs.
+        .add_static_property("INPUT_UP",      &GameEngine::INPUT_UP) //Add constants for different inputs.
         .add_static_property("INPUT_RIGHT",   &GameEngine::INPUT_RIGHT)
         .add_static_property("INPUT_DOWN",    &GameEngine::INPUT_DOWN)
         .add_static_property("INPUT_LEFT",    &GameEngine::INPUT_LEFT)

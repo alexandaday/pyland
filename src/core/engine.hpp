@@ -132,6 +132,12 @@ public:
     static bool walkable(glm::ivec2 location);
 
     ///
+    /// Change the map to the map specified by the given locatuib
+    /// @param location of the .tmx map file
+    ///
+    static void change_map(std::string map_location);
+
+    ///
     /// Change the tile in the map in the given layer at the provided position
     /// @param tile the x,y position of the tile to change
     /// @param layer the layer of the tile to change

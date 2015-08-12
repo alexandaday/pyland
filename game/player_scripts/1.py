@@ -1,2 +1,3 @@
 while(True):
-  move_north()
+  move_west()
+ # move_west()

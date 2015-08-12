@@ -17,6 +17,7 @@
 #include "dispatcher.hpp"
 #include "engine.hpp"
 #include "fml.hpp"
+#include "game_engine.hpp"
 #include "layer.hpp"
 #include "map.hpp"
 #include "map_loader.hpp"
@@ -98,7 +99,8 @@ int Map::get_tile_type(int x, int y) {
             return layer->get_tile(x, y).second;
         }
     }
-    return -1; 
+    //return -1;
+    return GameEngine::TILE_TYPE_SOLID();
 }
 
 
