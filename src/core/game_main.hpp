@@ -29,8 +29,8 @@ private:
     //Part of the game window interface
     GameWindow embedWindow;
     Interpreter interpreter;
-    InputManager* input_manager;
-    GUIMain gui;
+    InputManager *input_manager;
+    GUIMain *gui;
     CallbackState callbackstate;
     EventManager *em;
 

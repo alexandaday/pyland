@@ -1,5 +1,7 @@
 #include "python_embed_headers.hpp"
 
+#include <iostream>
+
 #include <boost/python.hpp>
 #include <glog/logging.h>
 #include <mutex>
@@ -18,7 +20,7 @@ namespace lock {
         PyObject *exc,*val,*tb;
         object formatted_list, formatted;
         PyErr_Fetch(&exc,&val,&tb);
-        handle<> hexc(exc),hval(allow_null(val)),htb(allow_null(tb)); 
+        handle<> hexc(exc),hval(allow_null(val)),htb(allow_null(tb));
         object traceback(import("traceback"));
         if (!tb) {
             object format_exception_only(traceback.attr("format_exception_only"));
@@ -34,12 +36,18 @@ namespace lock {
     int GIL::i = 0;
 
     GIL::GIL(InterpreterContext interpreter_context, std::string name): name(name) {
+        std::cout << "Got GIL 0.1" << std::endl;
         inst = i;
+        std::cout << "Got GIL 0.2" << std::endl;
         ++i;
 
+        std::cout << "Got GIL 0.3" << std::endl;
         VLOG(1) << inst << " Aquiring GIL lock  " << name;
+
         PyEval_RestoreThread(interpreter_context.get_threadstate());
         VLOG(1) << inst << " GIL lock aquired   " << name;
+
+        std::cout << "Got GIL 0.4" << std::endl;
     }
 
     GIL::GIL(InterpreterContext interpreter_context): GIL(interpreter_context, "") {}

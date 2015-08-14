@@ -197,6 +197,8 @@ class Player(Character):
     """ Override character move methods to prevent movement if script is running
     """
     def __input_move_north(self, callback = lambda: None):
+        engine = self.get_engine()
+        engine.change_map("test_world/yingischallenged/main_2")
         if (not self.__running_script) and (not self.is_moving()): #Check that a script isn't running
             def callback_wrap():
                 self.__trigger_walk_on() #call walk-on triggers on objects player walks on

@@ -49,13 +49,14 @@ GameMain::GameMain(int &argc, char **argv):
 
     embedWindow(800, 600, argc, argv, this),
     interpreter(boost::filesystem::absolute("python_embed/wrapper_functions.so").normalize()),
-    gui(&embedWindow),
     callbackstate(),
     em(EventManager::get_instance()),
     tile_identifier_text(&embedWindow, Engine::get_game_font(), false)
 
 {
     LOG(INFO) << "Constructing GameMain..." << endl;
+
+    gui = new GUIMain(&embedWindow);
 
     Config::json j = Config::get_instance();
     /// CREATE GLOBAL OBJECTS
@@ -71,12 +72,13 @@ GameMain::GameMain(int &argc, char **argv):
 
         auto window_size = (*game_window).get_size();
 
-        gui.get_gui_window()->set_width_pixels(window_size.first);
-        gui.get_gui_window()->set_height_pixels(window_size.second);
-        gui.refresh_gui();
+        gui->get_gui_window()->set_width_pixels(window_size.first);
+        gui->get_gui_window()->set_height_pixels(window_size.second);
+        gui->refresh_gui();
 
         original_window_size = window_size;
     };
+    gui_resize_lifeline = embedWindow.register_resize_handler(gui_resize_func);
 
     //Register InputHandler callbacks
     InputHandler::get_instance()->register_input_callback(InputHandler::INPUT_TOGGLE_SPEED, Engine::trigger_speed);
@@ -92,13 +94,11 @@ GameMain::GameMain(int &argc, char **argv):
     InputHandler::get_instance()->register_input_callback(InputHandler::INPUT_NINE, [] () {Engine::trigger_run(9); });
     InputHandler::get_instance()->register_input_callback(InputHandler::INPUT_SWITCH, Engine::focus_next);
 
-    gui_resize_lifeline = embedWindow.register_resize_handler(gui_resize_func);
-
     //The callbacks
     // WARNING: Fragile reference capture
     map_resize_lifeline = embedWindow.register_resize_handler([&] (GameWindow *)
     {
-        gui.get_map_viewer()->resize();
+        gui->get_map_viewer()->resize();
     });
 
     up_callback = input_manager->register_keyboard_handler(filter(
@@ -217,7 +217,8 @@ GameMain::GameMain(int &argc, char **argv):
     {KEY_PRESS, KEY("7")},
     [&] (KeyboardInputEvent)
     {
-        InputHandler::get_instance()->run_list(InputHandler::INPUT_SEVEN);
+        change_challenge("test_world/yingischallenged/main");
+        //InputHandler::get_instance()->run_list(InputHandler::INPUT_SEVEN);
     }
     ));
 
@@ -226,6 +227,7 @@ GameMain::GameMain(int &argc, char **argv):
     [&] (KeyboardInputEvent)
     {
         challenge->end_python();
+        em->flush_and_disable(interpreter.interpreter_context);
         std::cout << "Ending python " << std::endl;
         InputHandler::get_instance()->run_list(InputHandler::INPUT_EIGHT);
     }
@@ -236,7 +238,7 @@ GameMain::GameMain(int &argc, char **argv):
     [&] (KeyboardInputEvent)
     {
         change_challenge("test_world/yingischallenged/intro");
-        InputHandler::get_instance()->run_list(InputHandler::INPUT_NINE);
+        //InputHandler::get_instance()->run_list(InputHandler::INPUT_NINE);
     }
     ));
 
@@ -244,7 +246,7 @@ GameMain::GameMain(int &argc, char **argv):
     {MOUSE_RELEASE},
     [&] (MouseInputEvent event)
     {
-        gui.get_gui_manager()->mouse_callback_function(event);
+        gui->get_gui_manager()->mouse_callback_function(event);
     }));
 
     for (unsigned int i=0; i<10; ++i)
@@ -316,7 +318,7 @@ GameMain::GameMain(int &argc, char **argv):
     challenge_data = (new ChallengeData(
                           "",
                           &interpreter,
-                          gui.get_gui_manager(),
+                          gui->get_gui_manager(),
                           &embedWindow,
                           input_manager
                         ));
@@ -326,7 +328,7 @@ GameMain::GameMain(int &argc, char **argv):
     //challenge->start();
 
     last_clock = (std::chrono::steady_clock::now());
-    gui.refresh_gui();
+    gui->refresh_gui();
 
     //test_world/yingischallenged/main
     //change_challenge("intro");
@@ -352,7 +354,14 @@ GameMain::~GameMain()
 
     delete challenge_data;
     delete cursor;
+
+    delete gui;
+
+
+
     LOG(INFO) << "Destructed GameMain..." << endl;
+
+
 }
 
 void GameMain::game_loop(bool showMouse)
@@ -438,7 +447,7 @@ Challenge* GameMain::pick_challenge(ChallengeData* challenge_data) {
     std::string level_folder = j["files"]["level_folder"];
     challenge_data->map_name = level_folder + challenge_name + "/layout.tmx";
     challenge_data->level_location = challenge_name;
-    challenge = new Challenge(challenge_data, &gui);
+    challenge = new Challenge(challenge_data, gui);
 
     return challenge;
 }
@@ -459,15 +468,26 @@ void GameMain::change_challenge(std::string map_location) {
 
     std::cout << "Got 0.2" << std::endl;
 
-    //em->flush_and_disable(interpreter.interpreter_context);
+    em->flush_and_disable_got_key(interpreter.interpreter_context);
 
     std::cout << "Got 0.3" << std::endl;
 
+    InputHandler::get_instance()->flush_all();
+
+    std::cout << "Got 0.3.1" << std::endl;
+
     delete challenge;
+
+
+    delete gui;
+
+    gui = new GUIMain(&embedWindow);
+
+
 
     std::cout << "Got 0.4" << std::endl;
 
-    //em->reenable();
+    em->reenable();
 
     std::cout << "Got 1" << std::endl;
 
@@ -492,19 +512,23 @@ void GameMain::change_challenge(std::string map_location) {
 
     std::cout << "Got 3.3" << std::endl;
 
-    challenge = new Challenge(challenge_data, &gui);
+    challenge = new Challenge(challenge_data, gui);
 
     std::cout << "Got 3.4" << std::endl;
 
     Engine::set_challenge(challenge);
 
-
+    //em->reenable();
 
     callbackstate.stop();
 
     challenge_data->run_challenge = true;
 
     std::cout << "Got 4" << std::endl;
+
+    run_game = true;
+
+
 
     //changing_challenge = false;
 }
@@ -524,5 +548,5 @@ std::chrono::steady_clock::time_point GameMain::get_start_time(){
 
 //Switch the focus to the next playable object
 void GameMain::focus_next(){
-    gui.click_next_player();
+    gui->click_next_player();
 }
