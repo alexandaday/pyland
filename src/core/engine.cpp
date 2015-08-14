@@ -189,7 +189,7 @@ void Engine::change_map(std::string map_location){
         //kill python thread
         game_main->run_game = false;
         game_main->change_challenge(map_location);
-        game_main->run_game = true;
+        //game_main->run_game = true;
     //});
     //game_main->run_game = false;
 }

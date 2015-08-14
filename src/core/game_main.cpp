@@ -225,6 +225,8 @@ GameMain::GameMain(int &argc, char **argv):
     {KEY_PRESS, KEY("8")},
     [&] (KeyboardInputEvent)
     {
+        challenge->end_python();
+        std::cout << "Ending python " << std::endl;
         InputHandler::get_instance()->run_list(InputHandler::INPUT_EIGHT);
     }
     ));
