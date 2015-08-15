@@ -78,12 +78,6 @@ Challenge::~Challenge() {
     std::cout << "Deleting challenge 3" << std::endl;
 }
 
-void Challenge::end_python(){
-    std::cout << "Killing" << std::endl;
-    daemon->value->halt_soft(EntityThread::Signal::KILL);
-    //daemon->value->halt_hard(EntityThread::Signal::STOP);
-}
-
 int Challenge::make_object(glm::vec2 position,
                            std::string name,
                            Walkability walkability) {

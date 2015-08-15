@@ -25,7 +25,7 @@
 
 #include <glog/logging.h>
 
-#include "callback.hpp"f
+#include "callback.hpp"
 #include "game_window.hpp"
 #include "image.hpp"
 #include "shader.hpp"

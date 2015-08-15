@@ -192,7 +192,10 @@ void Engine::change_map(std::string map_location){
 
         //game_main->change_challenge(map_location);
 
-        EventManager::get_instance()->add_event([map_location] {game_main->change_challenge(map_location);});
+        auto _game_main = game_main;
+
+
+        EventManager::get_instance()->add_event([_game_main, map_location] {_game_main->change_challenge(map_location);});
         //game_main->run_game = true;
     //});
     //game_main->run_game = false;

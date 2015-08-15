@@ -226,9 +226,6 @@ GameMain::GameMain(int &argc, char **argv):
     {KEY_PRESS, KEY("8")},
     [&] (KeyboardInputEvent)
     {
-        challenge->end_python();
-        em->flush_and_disable(interpreter.interpreter_context);
-        std::cout << "Ending python " << std::endl;
         InputHandler::get_instance()->run_list(InputHandler::INPUT_EIGHT);
     }
     ));
@@ -468,11 +465,12 @@ void GameMain::change_challenge(std::string map_location) {
 
     std::cout << "Got 0.2" << std::endl;
 
-    em->flush_and_disable_got_key(interpreter.interpreter_context);
+    em->flush_and_disable(interpreter.interpreter_context);
 
     std::cout << "Got 0.3" << std::endl;
 
-    InputHandler::get_instance()->flush_all();
+    //FLUSH INPUT HANDLER
+    //InputHandler::get_instance()->flush_all();
 
     std::cout << "Got 0.3.1" << std::endl;
 
