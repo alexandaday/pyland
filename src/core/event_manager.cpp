@@ -6,7 +6,7 @@
 #include <glog/logging.h>
 #include <list>
 #include <mutex>
-#include <ostream>
+#include <iostream>
 #include <ratio>
 
 #include "event_manager.hpp"
@@ -64,16 +64,73 @@ void EventManager::flush_and_disable(InterpreterContext &interpreter_context) {
     // it goes out of scope. So we introduce scope here to release
     // the mutex
     {
+        std::cout << "Got EM 0.1" << std::endl;
+
         //lock the Python GIL. Automatically unlocks it on destruction (when it goes out of scope).
         //neccesary for when there are python callbacks on the event queue. As they GIL needs to be locked when the are destructed.
         lock::GIL lock_gil(interpreter_context, "EventManager::process_events");
+
+        std::cout << "Got EM 0.2" << std::endl;
+
         //Lock the lists
         std::lock_guard<std::mutex> lock(queue_mutex);
 
+        std::cout << "Got EM 0.3" << std::endl;
+
         enabled = false;
+
+        std::cout << "Got EM 0.4" << std::endl;
 
         //Clear both lists
         curr_frame_queue->clear();
+
+        std::cout << "Got EM 0.5" << std::endl;
+
+        next_frame_queue->clear();
+
+    }
+    // Lock released
+}
+
+void EventManager::flush_and_disable_got_key(InterpreterContext &interpreter_context) {
+    //
+    // This will clear both lists out. Now, if another thread tries
+    // to add something but blocks before getting a lock (but is stil
+    // in an add_event function), then, once this method completes,
+    // that event would still be added to the queue.
+    //
+    // The intention of this function is to be used once all the
+    // threads that are putting data onto the event queues are finished.
+    // Essentially, it is run after maps are unloaded and we are
+    // preparing for a new map.
+    //
+
+    // The lock_guard is exception safe and releases the mutex when
+    // it goes out of scope. So we introduce scope here to release
+    // the mutex
+    {
+        std::cout << "Got EM GOTKEY 0.1" << std::endl;
+
+        //lock the Python GIL. Automatically unlocks it on destruction (when it goes out of scope).
+        //neccesary for when there are python callbacks on the event queue. As they GIL needs to be locked when the are destructed.
+        //lock::GIL lock_gil(interpreter_context, "EventManager::process_events");
+
+        std::cout << "Got EM GOTKEY 0.2" << std::endl;
+
+        //Lock the lists
+        std::lock_guard<std::mutex> lock(queue_mutex);
+
+        std::cout << "Got EM GOTKEY 0.3" << std::endl;
+
+        enabled = false;
+
+        std::cout << "Got EM GOTKEY 0.4" << std::endl;
+
+        //Clear both lists
+        curr_frame_queue->clear();
+
+        std::cout << "Got EM GOTKEY 0.5" << std::endl;
+
         next_frame_queue->clear();
 
     }

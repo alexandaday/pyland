@@ -81,6 +81,8 @@ public:
     ///
     void flush_and_disable(InterpreterContext &interpreter_context);
 
+    void flush_and_disable_got_key(InterpreterContext &interpreter_context);
+
     ///
     /// Reenable the queue after a call to flush_and_disable.
     ///

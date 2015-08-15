@@ -34,6 +34,11 @@ GUIMain::GUIMain(GameWindow * _embedWindow):
     gui_window = std::make_shared<GUIWindow>();
     gui_window->set_visible(false);
 
+    auto window_size = (*embedWindow).get_size();
+
+    gui_window->set_width_pixels(window_size.first);
+    gui_window->set_height_pixels(window_size.second);
+
     gui_manager.set_root(gui_window);
 
     create_notification_bar();

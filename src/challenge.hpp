@@ -46,6 +46,8 @@ protected:
     std::vector<int> map_object_ids;
 public:
 
+    void end_python();
+
     Challenge(ChallengeData* _challenge_data, GUIMain * _gui_main);
 
     virtual ~Challenge();

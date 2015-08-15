@@ -187,9 +187,13 @@ bool Engine::walkable(glm::ivec2 location) {
 void Engine::change_map(std::string map_location){
     //std::thread *first = new std::thread([map_location]() {
         //kill python thread
-        game_main->run_game = false;
-        game_main->change_challenge(map_location);
-        game_main->run_game = true;
+        //game_main->run_game = false;
+        std::cout << "changing map" << std::endl;
+
+        //game_main->change_challenge(map_location);
+
+        EventManager::get_instance()->add_event([map_location] {game_main->change_challenge(map_location);});
+        //game_main->run_game = true;
     //});
     //game_main->run_game = false;
 }

@@ -54,6 +54,12 @@ Challenge::Challenge(ChallengeData* _challenge_data, GUIMain * _gui_main) :
 }
 
 Challenge::~Challenge() {
+    std::cout << "Deleting challenge 1" << std::endl;
+
+    daemon->value->halt_soft(EntityThread::Signal::KILL);
+
+    std::cout << "Deleting challenge 2" << std::endl;
+
     //Remove all map objects
     for(int map_object_id : map_object_ids) {
         ObjectManager::get_instance().remove_object(map_object_id);
@@ -68,6 +74,14 @@ Challenge::~Challenge() {
     delete game_engine;
     //All threads created for the challenge should have terminated now
     LOG(INFO) << " CHALLENGE DESTROYED ";
+
+    std::cout << "Deleting challenge 3" << std::endl;
+}
+
+void Challenge::end_python(){
+    std::cout << "Killing" << std::endl;
+    daemon->value->halt_soft(EntityThread::Signal::KILL);
+    //daemon->value->halt_hard(EntityThread::Signal::STOP);
 }
 
 int Challenge::make_object(glm::vec2 position,
