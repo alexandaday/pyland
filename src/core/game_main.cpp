@@ -465,7 +465,7 @@ void GameMain::change_challenge(std::string map_location) {
 
     std::cout << "Got 0.2" << std::endl;
 
-    em->flush_and_disable(interpreter.interpreter_context);
+    em->flush_and_disable_got_key(interpreter.interpreter_context);
 
     std::cout << "Got 0.3" << std::endl;
 

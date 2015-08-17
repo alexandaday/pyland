@@ -152,6 +152,7 @@ void EventManager::process_events(InterpreterContext &interpreter_context) {
 
         //lock the Python GIL. Automatically unlocks it on destruction (when it goes out of scope).
         //neccesary for when there are python callbacks on the event queue. As they GIL needs to be locked when the are run and destructed.
+        std::cout << "processing events" << std::endl;
         lock::GIL lock_gil(interpreter_context, "EventManager::process_events");
         //The callback function we need to process
         std::function<void ()> func;

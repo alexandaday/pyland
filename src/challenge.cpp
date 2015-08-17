@@ -56,7 +56,7 @@ Challenge::Challenge(ChallengeData* _challenge_data, GUIMain * _gui_main) :
 Challenge::~Challenge() {
     std::cout << "Deleting challenge 1" << std::endl;
 
-    daemon->value->halt_soft(EntityThread::Signal::KILL);
+    daemon->value->halt_soft_got_key(EntityThread::Signal::KILL);
 
     std::cout << "Deleting challenge 2" << std::endl;
 
